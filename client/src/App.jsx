@@ -4,11 +4,14 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import Matches from './pages/Matches';
+import Standings from './pages/Standings';
 import Register from './pages/Register';
 import Leaderboard from './pages/Leaderboard';
 import Groups from './pages/Groups';
-import Admin from './pages/Admin';
 import MyPicks from './pages/MyPicks';
+import Profile from './pages/Profile';
+import Admin from './pages/Admin';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -29,12 +32,15 @@ function AppRoutes() {
       <div className="max-w-2xl mx-auto px-4 py-6">
         <Routes>
           <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
-          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-          <Route path="/groups" element={<ProtectedRoute><Groups /></ProtectedRoute>} />
-          <Route path="/mypicks" element={<ProtectedRoute><MyPicks /></ProtectedRoute>} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/"           element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/matches"    element={<ProtectedRoute><Matches /></ProtectedRoute>} />
+          <Route path="/standings"  element={<ProtectedRoute><Standings /></ProtectedRoute>} />
+          <Route path="/leaderboard"element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+          <Route path="/groups"     element={<ProtectedRoute><Groups /></ProtectedRoute>} />
+          <Route path="/mypicks"    element={<ProtectedRoute><MyPicks /></ProtectedRoute>} />
+          <Route path="/profile"    element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/admin"      element={<Admin />} />
+          <Route path="*"           element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </div>

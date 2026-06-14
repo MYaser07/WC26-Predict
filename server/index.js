@@ -9,6 +9,7 @@ const predictionsRouter = require('./routes/predictions');
 const leaderboardRouter = require('./routes/leaderboard');
 const groupsRouter      = require('./routes/groups');
 const adminRouter       = require('./routes/admin');
+const standingsRouter   = require('./routes/standings');
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -26,6 +27,7 @@ app.use('/api/predictions', predictionsRouter);
 app.use('/api/leaderboard', leaderboardRouter);
 app.use('/api/groups',      groupsRouter);
 app.use('/api/admin',       adminRouter);
+app.use('/api/standings',   standingsRouter);
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 // Serve React app in production

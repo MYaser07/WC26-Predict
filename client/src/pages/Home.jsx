@@ -20,7 +20,10 @@ function formatDayTab(dateStr) {
 }
 
 function toLocalDate(isoStr) {
-  const d = new Date(isoStr);
+  if (!isoStr) return 'invalid';
+  // SQLite stores "2026-06-14 19:00:00" — normalize to ISO before parsing
+  const d = new Date(isoStr.replace(' ', 'T'));
+  if (isNaN(d.getTime())) return 'invalid';
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');

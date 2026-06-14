@@ -23,10 +23,10 @@ router.post('/', (req, res) => {
   if (match.status !== 'upcoming') {
     return res.status(400).json({ error: 'Cannot predict on a match that has already started' });
   }
-  // Lock predictions 2 hours before kickoff
-  const kickoff = new Date(match.match_time).getTime();
-  if (Date.now() > kickoff - 2 * 60 * 60 * 1000) {
-    return res.status(400).json({ error: 'Predictions close 2 hours before kickoff' });
+  // Lock predictions at kickoff
+  const kickoff = new Date(match.match_time.replace(' ', 'T')).getTime();
+  if (Date.now() >= kickoff) {
+    return res.status(400).json({ error: 'Predictions closed — match has kicked off' });
   }
 
   // Check for existing prediction
@@ -66,9 +66,9 @@ router.put('/:id', (req, res) => {
   if (match.status !== 'upcoming') {
     return res.status(400).json({ error: 'Cannot edit prediction after match has started' });
   }
-  const kickoff = new Date(match.match_time).getTime();
-  if (Date.now() > kickoff - 2 * 60 * 60 * 1000) {
-    return res.status(400).json({ error: 'Predictions close 2 hours before kickoff' });
+  const kickoff = new Date(match.match_time.replace(' ', 'T')).getTime();
+  if (Date.now() >= kickoff) {
+    return res.status(400).json({ error: 'Predictions closed — match has kicked off' });
   }
 
   db.prepare(`

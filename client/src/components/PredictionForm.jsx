@@ -49,10 +49,9 @@ export default function PredictionForm({ match, existingPrediction, userId, onSa
   const [error, setError]   = useState('');
   const [editing, setEditing] = useState(false);
 
-  const kickoff     = new Date(match.match_time).getTime();
-  const twoHrsBefore = kickoff - 2 * 60 * 60 * 1000;
-  const canEdit     = match.status === 'upcoming' && Date.now() < twoHrsBefore;
-  const locked2h    = match.status === 'upcoming' && Date.now() >= twoHrsBefore;
+  const kickoff  = new Date((match.match_time || match.kickoff || '').replace(' ', 'T')).getTime();
+  const canEdit  = match.status === 'upcoming' && Date.now() < kickoff;
+  const locked2h = match.status === 'upcoming' && Date.now() >= kickoff;
   const hasExisting = !!existingPrediction;
 
   const submit = async (e) => {
@@ -93,7 +92,7 @@ export default function PredictionForm({ match, existingPrediction, userId, onSa
 
   if (locked2h && !hasExisting) return (
     <div style={row}>
-      <span style={{ fontFamily: TXT, fontSize: '13px', color: 'var(--text-3)' }}>🔒 Predictions closed (2h before kickoff)</span>
+      <span style={{ fontFamily: TXT, fontSize: '13px', color: 'var(--text-3)' }}>🔒 Predictions closed — match kicked off</span>
     </div>
   );
 

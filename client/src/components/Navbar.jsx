@@ -11,6 +11,7 @@ export default function Navbar() {
 
   const navLinks = [
     { to: '/',            label: 'Matches' },
+    { to: '/mypicks',     label: 'My Picks' },
     { to: '/leaderboard', label: 'Leaderboard' },
     { to: '/groups',      label: 'Groups' },
   ];

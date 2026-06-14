@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Leaderboard from './pages/Leaderboard';
 import Groups from './pages/Groups';
 import Admin from './pages/Admin';
+import MyPicks from './pages/MyPicks';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -31,6 +32,7 @@ function AppRoutes() {
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><Groups /></ProtectedRoute>} />
+          <Route path="/mypicks" element={<ProtectedRoute><MyPicks /></ProtectedRoute>} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

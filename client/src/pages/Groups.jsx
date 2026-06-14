@@ -85,11 +85,78 @@ function GroupPredictionsModal({ group, match, onClose }) {
   );
 }
 
+function UserHistoryModal({ group, targetUser, onClose }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/api/groups/${group.id}/members/${targetUser.id}/predictions`)
+      .then(r => r.json())
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [group.id, targetUser.id]);
+
+  const totalPts = data?.predictions?.reduce((s, p) => s + (p.points ?? 0), 0) ?? 0;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="card w-full max-w-md p-6" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="font-bold text-white">{targetUser.username}</h3>
+            <p className="text-xs text-gray-400">{targetUser.supported_team} · {totalPts} pts total</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">✕</button>
+        </div>
+
+        {loading ? (
+          <div className="text-green-400 animate-pulse py-4 text-center">Loading...</div>
+        ) : !data?.predictions?.length ? (
+          <p className="text-gray-500 text-sm text-center py-8">No finished matches yet</p>
+        ) : (
+          <div className="space-y-2">
+            {data.predictions.map(p => (
+              <div key={p.match_id} className="bg-[#162016] rounded-lg px-3 py-2">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-white font-medium truncate mr-2">
+                    {p.home_team} <span className="text-gray-500">vs</span> {p.away_team}
+                  </div>
+                  {p.points !== null && p.home_goals !== null ? (
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
+                      p.points === 3 ? 'bg-yellow-500/20 text-yellow-400' :
+                      p.points === 1 ? 'bg-blue-500/20 text-blue-400' :
+                      'bg-red-500/20 text-red-400'
+                    }`}>{p.points}pts</span>
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-3 mt-1 text-xs">
+                  <span className="text-gray-400">
+                    Result: <span className="text-white font-bold">{p.home_score} – {p.away_score}</span>
+                  </span>
+                  {p.home_goals !== null ? (
+                    <span className="text-gray-400">
+                      Pick: <span className="text-green-300 font-bold">{p.home_goals} – {p.away_goals}</span>
+                    </span>
+                  ) : (
+                    <span className="text-gray-600">No pick</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function GroupDetail({ group, onBack }) {
   const [leaderboard, setLeaderboard] = useState([]);
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMatch, setSelectedMatch] = useState(null);
+  const [historyUser, setHistoryUser] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -148,9 +215,16 @@ function GroupDetail({ group, onBack }) {
                     <div className="text-xs text-gray-500">{entry.supported_team}</div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-green-400 font-black">{entry.total_points}pts</div>
-                  <div className="text-xs text-gray-500">⭐{entry.exact_scores} ✓{entry.correct_winners}</div>
+                <div className="flex items-center gap-2">
+                  <div className="text-right">
+                    <div className="text-green-400 font-black">{entry.total_points}pts</div>
+                    <div className="text-xs text-gray-500">⭐{entry.exact_scores} ✓{entry.correct_winners}</div>
+                  </div>
+                  <button
+                    onClick={() => setHistoryUser(entry)}
+                    className="text-gray-400 hover:text-white border border-green-900/40 px-2 py-1 rounded text-xs"
+                    title="View prediction history"
+                  >📋</button>
                 </div>
               </div>
             ))}
@@ -194,6 +268,14 @@ function GroupDetail({ group, onBack }) {
           group={group}
           match={selectedMatch}
           onClose={() => setSelectedMatch(null)}
+        />
+      )}
+
+      {historyUser && (
+        <UserHistoryModal
+          group={group}
+          targetUser={historyUser}
+          onClose={() => setHistoryUser(null)}
         />
       )}
     </div>

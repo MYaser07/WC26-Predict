@@ -148,6 +148,30 @@ router.get('/:id/predictions/:matchId', (req, res) => {
   res.json({ revealed: true, match, predictions });
 });
 
+// GET /api/groups/:id/members/:userId/predictions
+router.get('/:id/members/:userId/predictions', (req, res) => {
+  const db = getDb();
+  const { id: groupId, userId } = req.params;
+
+  const member = db.prepare('SELECT * FROM group_members WHERE group_id = ? AND user_id = ?').get(groupId, userId);
+  if (!member) return res.status(403).json({ error: 'User not in group' });
+
+  const user = db.prepare('SELECT id, username, supported_team FROM users WHERE id = ?').get(userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  const predictions = db.prepare(`
+    SELECT m.id as match_id, m.home_team, m.away_team, m.kickoff, m.status,
+      m.home_score, m.away_score, m.competition,
+      p.home_goals, p.away_goals, p.points
+    FROM matches m
+    LEFT JOIN predictions p ON m.id = p.match_id AND p.user_id = ?
+    WHERE m.status IN ('live', 'finished')
+    ORDER BY m.kickoff ASC
+  `).all(userId);
+
+  res.json({ user, predictions });
+});
+
 // GET /api/groups/:id - get group info
 router.get('/:id', (req, res) => {
   const db = getDb();

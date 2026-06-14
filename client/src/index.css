@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── WC2026 Official Fonts ── */
+@font-face {
+  font-family: 'FWC2026';
+  src: url('/fonts/FWC2026-UltraCondensedBlack.ttf') format('truetype');
+  font-weight: 900;
+}
+@font-face {
+  font-family: 'FWC2026';
+  src: url('/fonts/FWC2026-NormalBlack.ttf') format('truetype');
+  font-weight: 800;
+}
+@font-face {
+  font-family: 'FWC2026';
+  src: url('/fonts/FWC2026-NormalRegular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+/* ── Theme tokens ── */
+:root {
+  --bg:         #f1f5f9;
+  --bg2:        #e2e8f0;
+  --surface:    #ffffff;
+  --surface2:   #f8fafc;
+  --border:     rgba(0,0,0,0.08);
+  --text-1:     #0f172a;
+  --text-2:     #475569;
+  --text-3:     #94a3b8;
+  --gold:       #d97706;
+  --purple:     #4f46e5;
+  --purple-2:   #7c3aed;
+  --teal:       #0d9488;
+  --red:        #dc2626;
+}
+
+[data-theme="dark"] {
+  --bg:         #06090f;
+  --bg2:        #0e1420;
+  --surface:    #111827;
+  --surface2:   #1e2535;
+  --border:     rgba(255,255,255,0.06);
+  --text-1:     #f1f5f9;
+  --text-2:     #94a3b8;
+  --text-3:     #475569;
+  --gold:       #f59e0b;
+  --purple:     #818cf8;
+  --purple-2:   #7c3aed;
+  --teal:       #2dd4bf;
+  --red:        #f87171;
+}
+
+/* ── Google Font: Inter ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+/* ── Base ── */
+@layer base {
+  body {
+    background-color: var(--bg);
+    color: var(--text-1);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s, color 0.2s;
+  }
+}
+
+/* ── Reusable components ── */
+@layer components {
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  /* Inputs */
+  .input {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    width: 100%;
+    color: var(--text-1);
+    font-family: 'FWC2026', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input::placeholder { color: var(--text-3); }
+  .input:focus {
+    border-color: var(--purple-2);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+  }
+
+  /* Primary button */
+  .btn-primary {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff;
+    font-family: 'FWC2026', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: inline-block;
+    text-align: center;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* Secondary button */
+  .btn-secondary {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    color: var(--text-2);
+    font-family: 'FWC2026', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    padding: 9px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-secondary:hover { opacity: 0.8; }
+
+  /* Danger button */
+  .btn-danger {
+    background: var(--red);
+    color: #fff;
+    font-family: 'FWC2026', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Badge */
+  .badge {
+    font-family: 'FWC2026', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+}
+
+/* ── Label utility ── */
+.label {
+  font-family: 'FWC2026', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+/* ── Rainbow bar ── */
+.rainbow-bar {
+  height: 3px;
+  background: linear-gradient(90deg,
+    #7c3aed 0%, #2563eb 17%, #0d9488 34%,
+    #65a30d 50%, #d97706 67%, #ea580c 83%, #dc2626 100%
+  );
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Background ── */
+.app-bg {
+  min-height: 100vh;
+  background: var(--bg);
+  transition: background 0.2s;
+}
+
+[data-theme="dark"] .app-bg {
+  background-image:
+    radial-gradient(ellipse at 15% 40%, rgba(124,58,237,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(13,148,136,0.04) 0%, transparent 55%);
+}

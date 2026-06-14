@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /usr /opt /home ~/.nvm -name \"npm\" -type f 2>/dev/null | head -5)",
+      "Bash(command -v node)"
+    ]
+  }
+}

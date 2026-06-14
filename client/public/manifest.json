@@ -1,0 +1,22 @@
+{
+  "name": "WC26 Predict",
+  "short_name": "WC26",
+  "description": "FIFA World Cup 2026 Match Predictions",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06090f",
+  "theme_color": "#06090f",
+  "icons": [
+    {
+      "src": "/wc26-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/wc26-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
